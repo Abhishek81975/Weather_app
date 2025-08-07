@@ -2,271 +2,204 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Weather App</title>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Modern Weather App</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
   <style>
     * {
       margin: 0;
       padding: 0;
+      font-family: 'Poppins', sans-serif;
       box-sizing: border-box;
-      font-family: 'Roboto', sans-serif;
     }
 
     body {
-      min-height: 100vh;
-      background: linear-gradient(135deg, #1e3c72, #2a5298);
-      background-size: 400% 400%;
-      animation: backgroundShift 15s ease infinite;
+      background: linear-gradient(135deg, #2c3e50, #3498db);
       display: flex;
       justify-content: center;
       align-items: center;
-    }
-
-    @keyframes backgroundShift {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
+      min-height: 100vh;
+      padding: 20px;
     }
 
     .card {
-      width: 350px;
-      padding: 30px 25px;
+      width: 100%;
+      max-width: 420px;
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
       border-radius: 20px;
-      backdrop-filter: blur(18px);
-      background: rgba(255, 255, 255, 0.08);
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-      color: #fff;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+      padding: 40px 30px;
+      color: #ffffff;
       text-align: center;
+      transition: all 0.3s ease-in-out;
     }
 
     .search {
       display: flex;
-      justify-content: center;
-      gap: 10px;
+      align-items: center;
+      justify-content: space-between;
       margin-bottom: 25px;
     }
 
     .search input {
-      padding: 10px 15px;
-      border-radius: 8px;
+      flex: 1;
+      padding: 12px 16px;
       border: none;
-      outline: none;
+      border-radius: 10px;
       font-size: 16px;
-      width: 70%;
-      background-color: rgba(255, 255, 255, 0.1);
-      color: #fff;
-      transition: all 0.3s;
-    }
-
-    .search input::placeholder {
-      color: #ddd;
-    }
-
-    .search input:focus {
-      background-color: rgba(255, 255, 255, 0.2);
+      outline: none;
+      background: #ffffff;
+      color: #333;
+      margin-right: 10px;
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
     }
 
     .search button {
-      padding: 10px;
-      background-color: #ffffff22;
+      background: #ffffff;
       border: none;
-      border-radius: 8px;
+      border-radius: 10px;
+      padding: 10px;
       cursor: pointer;
-      transition: background-color 0.3s;
+      transition: background 0.3s;
     }
 
     .search button:hover {
-      background-color: #ffffff44;
+      background: #e3e3e3;
     }
 
-    .datetime {
-      font-size: 14px;
-      margin-bottom: 20px;
-      opacity: 0.9;
+    .search button img {
+      width: 25px;
+      height: 25px;
     }
 
-    .temp {
-      font-size: 58px;
-      font-weight: 700;
+    .weather {
+      margin-top: 20px;
     }
 
-    .city {
+    .weather-icon {
+      width: 150px;
+      margin: 20px 0;
+      animation: float 2s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    .weather h1 {
+      font-size: 48px;
+      font-weight: 600;
+    }
+
+    .weather h2 {
       font-size: 24px;
+      font-weight: 400;
       margin-top: 5px;
-      font-weight: 500;
+      color: #e0e0e0;
     }
 
     .details {
-      margin-top: 30px;
       display: flex;
-      justify-content: space-around;
+      justify-content: space-between;
+      margin-top: 40px;
       gap: 20px;
     }
 
     .info-block {
       display: flex;
-      flex-direction: column;
       align-items: center;
-      font-size: 14px;
-      opacity: 0.9;
+      gap: 10px;
     }
 
     .info-block img {
-      width: 40px;
-      height: 40px;
-      margin-bottom: 5px;
+      width: 35px;
+      height: 35px;
     }
 
-    .error {
-      margin-top: 20px;
-      font-size: 14px;
-      color: #ffbaba;
-      display: none;
-    }
-
-    .loader {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      display: none;
-      z-index: 999;
-    }
-
-    .spinner {
-      width: 50px;
-      height: 50px;
-      border: 5px solid rgba(255, 255, 255, 0.3);
-      border-top: 5px solid #fff;
-      border-radius: 50%;
-      animation: spin 1s linear infinite;
-    }
-
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
+    .humidity,
+    .wind {
+      font-size: 20px;
+      font-weight: 500;
+      color: #f1f1f1;
     }
   </style>
 </head>
 <body>
-  <div class="loader"><div class="spinner"></div></div>
-
   <div class="card">
     <div class="search">
-      <input type="text" placeholder="Enter city name" spellcheck="false" />
-      <button>🔍</button>
+      <input type="text" placeholder="Enter city name" />
+      <button><img src="https://img.icons8.com/ios-filled/50/000000/search--v1.png"/></button>
     </div>
-
-    <div class="datetime" id="datetime">--:--</div>
-
     <div class="weather" style="display: none;">
+      <img src="" class="weather-icon" alt="weather icon" />
       <h1 class="temp">--°C</h1>
       <h2 class="city">City</h2>
-
       <div class="details">
         <div class="info-block">
-          <img src="Weather App - Easy Tutorials_files/winddd.gif" alt="Wind"/>
-          <p class="wind">-- km/h</p>
-          <p>Wind</p>
+          <img src="https://img.icons8.com/fluency/48/000000/wind.png"/>
+          <div class="wind">-- km/h</div>
         </div>
-
         <div class="info-block">
-          <img src="Weather App - Easy Tutorials_files/hdity.png" alt="Humidity"/>
-          <p class="humidity">--%</p>
-          <p>Humidity</p>
+          <img src="https://img.icons8.com/fluency/48/000000/humidity.png"/>
+          <div class="humidity">--%</div>
         </div>
       </div>
     </div>
-
-    <p class="error">City not found. Please try again.</p>
   </div>
 
   <script>
-    const apiKey = "fa180048e9e10bb8a232268bbbfa1574";
+    const apiKey = "fa180048e9e10bb8a232268bbbfa1574"; // Replace with your own API key if needed
     const apiUrl = "https://api.openweathermap.org/data/2.5/weather?units=metric&q=";
 
     const searchBox = document.querySelector(".search input");
     const searchBtn = document.querySelector(".search button");
-    const errorMsg = document.querySelector(".error");
-    const loader = document.querySelector(".loader");
+    const weatherBox = document.querySelector(".weather");
+    const weatherIcon = document.querySelector(".weather-icon");
 
-    async function checkWeather(city) {
+    async function getWeather(city) {
       try {
-        loader.style.display = "block";
-        document.querySelector(".weather").style.display = "none";
-        errorMsg.style.display = "none";
-
         const response = await fetch(apiUrl + city + `&appid=${apiKey}`);
         if (!response.ok) throw new Error("City not found");
 
         const data = await response.json();
 
+        document.querySelector(".city").innerText = data.name;
         document.querySelector(".temp").innerText = Math.round(data.main.temp) + "°C";
         document.querySelector(".humidity").innerText = data.main.humidity + "%";
         document.querySelector(".wind").innerText = data.wind.speed + " km/h";
 
-        const mainWeather = data.weather[0].main;
-        let emoji = "🌍";
+        const main = data.weather[0].main;
+        let iconUrl = "";
 
-        switch (mainWeather) {
-          case "Clear":
-            emoji = "☀️";
-            break;
-          case "Clouds":
-            emoji = "☁️";
-            break;
-          case "Rain":
-            emoji = "🌧️";
-            break;
-          case "Mist":
-            emoji = "🌫️";
-            break;
-          case "Snow":
-            emoji = "❄️";
-            break;
-          case "Drizzle":
-            emoji = "🌦️";
-            break;
-          case "Thunderstorm":
-            emoji = "⛈️";
-            break;
-          default:
-            emoji = "🌍";
+        switch(main) {
+          case "Clouds": iconUrl = "https://openweathermap.org/img/wn/03d@2x.png"; break;
+          case "Clear": iconUrl = "https://openweathermap.org/img/wn/01d@2x.png"; break;
+          case "Rain": iconUrl = "https://openweathermap.org/img/wn/09d@2x.png"; break;
+          case "Drizzle": iconUrl = "https://openweathermap.org/img/wn/10d@2x.png"; break;
+          case "Mist": iconUrl = "https://openweathermap.org/img/wn/50d@2x.png"; break;
+          case "Thunderstorm": iconUrl = "https://openweathermap.org/img/wn/11d@2x.png"; break;
+          case "Snow": iconUrl = "https://openweathermap.org/img/wn/13d@2x.png"; break;
+          default: iconUrl = "https://openweathermap.org/img/wn/01d@2x.png";
         }
 
-        document.querySelector(".city").innerText = `${emoji} ${data.name}`;
-        loader.style.display = "none";
-        document.querySelector(".weather").style.display = "block";
-
+        weatherIcon.src = iconUrl;
+        weatherBox.style.display = "block";
       } catch (error) {
-        loader.style.display = "none";
-        document.querySelector(".weather").style.display = "none";
-        errorMsg.style.display = "block";
+        alert("❌ City not found. Please try again.");
+        weatherBox.style.display = "none";
       }
     }
 
     searchBtn.addEventListener("click", () => {
       const city = searchBox.value.trim();
-      if (city) checkWeather(city);
+      if (city) getWeather(city);
     });
 
     searchBox.addEventListener("keypress", function (e) {
       if (e.key === "Enter") searchBtn.click();
     });
-
-    function updateDateTime() {
-      const now = new Date();
-      const options = {
-        weekday: 'short', year: 'numeric', month: 'short',
-        day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit'
-      };
-      const formatted = now.toLocaleString('en-IN', options);
-      document.getElementById("datetime").innerText = formatted;
-    }
-
-    setInterval(updateDateTime, 1000);
-    updateDateTime();
   </script>
 </body>
 </html>
