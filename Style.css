@@ -1,0 +1,118 @@
+* {
+    margin: 0;
+    padding: 0;
+    font-family: 'Poppins', sans-serif;
+    box-sizing: border-box;
+}
+
+body {
+    background: linear-gradient(135deg, #2c3e50, #3498db);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.card {
+    width: 100%;
+    max-width: 420px;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(20px);
+    border-radius: 20px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+    padding: 40px 30px;
+    color: #ffffff;
+    text-align: center;
+    transition: all 0.3s ease-in-out;
+}
+
+.search {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 25px;
+}
+
+.search input {
+    flex: 1;
+    padding: 12px 16px;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    outline: none;
+    background: #ffffff;
+    color: #333;
+    margin-right: 10px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
+}
+
+.search button {
+    background: #ffffff;
+    border: none;
+    border-radius: 10px;
+    padding: 10px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.search button:hover {
+    background: #e3e3e3;
+}
+
+.search button img {
+    width: 25px;
+    height: 25px;
+}
+
+.weather {
+    margin-top: 20px;
+}
+
+.weather-icon {
+    width: 150px;
+    margin: 20px 0;
+    animation: float 2s ease-in-out infinite;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+.weather h1 {
+    font-size: 48px;
+    font-weight: 600;
+}
+
+.weather h2 {
+    font-size: 24px;
+    font-weight: 400;
+    margin-top: 5px;
+    color: #e0e0e0;
+}
+
+.details {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 40px;
+    gap: 20px;
+}
+
+.info-block {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.info-block img {
+    width: 35px;
+    height: 35px;
+}
+
+.humidity,
+.wind {
+    font-size: 20px;
+    font-weight: 500;
+    color: #f1f1f1;
+}
