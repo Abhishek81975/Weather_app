@@ -3,24 +3,142 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Real Weather App</title>
-  <link rel="stylesheet" href="style.css" />
+  <title>Weather App</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
   <style>
-    /* Loader Spinner */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Roboto', sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      background: linear-gradient(135deg, #1e3c72, #2a5298);
+      background-size: 400% 400%;
+      animation: backgroundShift 15s ease infinite;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    @keyframes backgroundShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .card {
+      width: 350px;
+      padding: 30px 25px;
+      border-radius: 20px;
+      backdrop-filter: blur(18px);
+      background: rgba(255, 255, 255, 0.08);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      color: #fff;
+      text-align: center;
+    }
+
+    .search {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 25px;
+    }
+
+    .search input {
+      padding: 10px 15px;
+      border-radius: 8px;
+      border: none;
+      outline: none;
+      font-size: 16px;
+      width: 70%;
+      background-color: rgba(255, 255, 255, 0.1);
+      color: #fff;
+      transition: all 0.3s;
+    }
+
+    .search input::placeholder {
+      color: #ddd;
+    }
+
+    .search input:focus {
+      background-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .search button {
+      padding: 10px;
+      background-color: #ffffff22;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .search button:hover {
+      background-color: #ffffff44;
+    }
+
+    .datetime {
+      font-size: 14px;
+      margin-bottom: 20px;
+      opacity: 0.9;
+    }
+
+    .temp {
+      font-size: 58px;
+      font-weight: 700;
+    }
+
+    .city {
+      font-size: 24px;
+      margin-top: 5px;
+      font-weight: 500;
+    }
+
+    .details {
+      margin-top: 30px;
+      display: flex;
+      justify-content: space-around;
+      gap: 20px;
+    }
+
+    .info-block {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      font-size: 14px;
+      opacity: 0.9;
+    }
+
+    .info-block img {
+      width: 40px;
+      height: 40px;
+      margin-bottom: 5px;
+    }
+
+    .error {
+      margin-top: 20px;
+      font-size: 14px;
+      color: #ffbaba;
+      display: none;
+    }
+
     .loader {
       position: absolute;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
       display: none;
-      z-index: 100;
+      z-index: 999;
     }
 
     .spinner {
       width: 50px;
       height: 50px;
-      border: 5px solid #f3f3f3;
-      border-top: 5px solid #3498db;
+      border: 5px solid rgba(255, 255, 255, 0.3);
+      border-top: 5px solid #fff;
       border-radius: 50%;
       animation: spin 1s linear infinite;
     }
@@ -28,18 +146,6 @@
     @keyframes spin {
       0% { transform: rotate(0deg); }
       100% { transform: rotate(360deg); }
-    }
-
-    .datetime {
-      text-align: center;
-      color: #fff;
-      font-size: 16px;
-      margin-top: 10px;
-      font-weight: 400;
-    }
-
-    body {
-      transition: background 0.5s ease;
     }
   </style>
 </head>
@@ -49,36 +155,31 @@
   <div class="card">
     <div class="search">
       <input type="text" placeholder="Enter city name" spellcheck="false" />
-      <button><img src="serch.png" alt="Search"/></button>
+      <button>🔍</button>
     </div>
 
     <div class="datetime" id="datetime">--:--</div>
 
     <div class="weather" style="display: none;">
-      <img src="default.png" class="weather-icon" alt="Weather Icon"/>
       <h1 class="temp">--°C</h1>
       <h2 class="city">City</h2>
 
       <div class="details">
         <div class="info-block">
-          <img src="winddd.gif" alt="Wind"/>
-          <div>
-            <p class="wind">-- km/h</p>
-            <p>Wind Speed</p>
-          </div>
+          <img src="Weather App - Easy Tutorials_files/winddd.gif" alt="Wind"/>
+          <p class="wind">-- km/h</p>
+          <p>Wind</p>
         </div>
 
         <div class="info-block">
-          <img src="humidity.png" alt="Humidity"/>
-          <div>
-            <p class="humidity">--%</p>
-            <p>Humidity</p>
-          </div>
+          <img src="Weather App - Easy Tutorials_files/hdity.png" alt="Humidity"/>
+          <p class="humidity">--%</p>
+          <p>Humidity</p>
         </div>
       </div>
     </div>
 
-    <p class="error" style="color: #ffbaba; text-align: center; margin-top: 10px; display: none;">City not found. Please try again.</p>
+    <p class="error">City not found. Please try again.</p>
   </div>
 
   <script>
@@ -87,7 +188,6 @@
 
     const searchBox = document.querySelector(".search input");
     const searchBtn = document.querySelector(".search button");
-    const weatherIcon = document.querySelector(".weather-icon");
     const errorMsg = document.querySelector(".error");
     const loader = document.querySelector(".loader");
 
@@ -111,43 +211,27 @@
 
         switch (mainWeather) {
           case "Clear":
-            weatherIcon.src = "clearweather.webp";
-            document.body.style.background = "linear-gradient(to right, #56ccf2, #2f80ed)";
             emoji = "☀️";
             break;
           case "Clouds":
-            weatherIcon.src = "clouddd.png";
-            document.body.style.background = "linear-gradient(to right, #757f9a, #d7dde8)";
             emoji = "☁️";
             break;
           case "Rain":
-            weatherIcon.src = "rain.png";
-            document.body.style.background = "linear-gradient(to right, #3a6186, #89253e)";
             emoji = "🌧️";
             break;
           case "Mist":
-            weatherIcon.src = "mist.png";
-            document.body.style.background = "linear-gradient(to right, #606c88, #3f4c6b)";
             emoji = "🌫️";
             break;
           case "Snow":
-            weatherIcon.src = "snow.png";
-            document.body.style.background = "linear-gradient(to right, #e6dada, #274046)";
             emoji = "❄️";
             break;
           case "Drizzle":
-            weatherIcon.src = "drizzle.png";
-            document.body.style.background = "linear-gradient(to right, #5f2c82, #49a09d)";
             emoji = "🌦️";
             break;
           case "Thunderstorm":
-            weatherIcon.src = "thunderstorm.png";
-            document.body.style.background = "linear-gradient(to right, #0f2027, #203a43, #2c5364)";
             emoji = "⛈️";
             break;
           default:
-            weatherIcon.src = "default.png";
-            document.body.style.background = "linear-gradient(to right, #2c3e50, #3498db)";
             emoji = "🌍";
         }
 
@@ -171,7 +255,6 @@
       if (e.key === "Enter") searchBtn.click();
     });
 
-    // ✅ Show Live Date and Time
     function updateDateTime() {
       const now = new Date();
       const options = {
